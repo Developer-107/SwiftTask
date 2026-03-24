@@ -50,58 +50,69 @@ export default function UnassignedListTable() {
 
   return (
     <div className="h-screen flex items-center justify-center">
-    <Table.Root className="border border-gray-300 rounded-xl w-200">
-      <Table.Header>
-        <Table.Row className="text-xs">
-          <Table.ColumnHeaderCell>Parcel Id</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Tracking Number</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Created At</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>Updated At</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
-        </Table.Row>
-      </Table.Header>
+      <Table.Root className="border border-gray-300 rounded-xl w-200">
+        <Table.Header>
+          <Table.Row className="text-xs">
+            <Table.ColumnHeaderCell>Parcel Id</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Tracking Number</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Created At</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Updated At</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+          </Table.Row>
+        </Table.Header>
 
-      {loading ? (
-        <TableBodySkeleton />
-      ) : (
-        <Table.Body className="text-xs">
-          {unassignedParcels.map((unassignedParcel) => (
-            <Table.Row key={unassignedParcel?.id}>
-              <Table.RowHeaderCell className="font-medium!">{unassignedParcel?.id}</Table.RowHeaderCell>
-              <Table.Cell>{unassignedParcel?.trackingNumber}</Table.Cell>
-              <Table.Cell>
-                {new Date(unassignedParcel.createdAt).toLocaleDateString()}
-              </Table.Cell>
-              <Table.Cell>
-                {unassignedParcel.updatedAt
-                  ? new Date(unassignedParcel.updatedAt).toLocaleDateString()
-                  : "-"}
-              </Table.Cell>
-              <Table.Cell className="flex gap-4 items-center overflow-visible">
-                <Dropdown
-                  users={users}
-                  value={selectedUsers[unassignedParcel.id]}
-                  onChange={(userId) =>
-                    setSelectedUsers((prev) => ({
-                      ...prev,
-                      [unassignedParcel.id]: userId,
-                    }))
-                  }
-                />
-
-                <button
-                  onClick={() => handleAssign(unassignedParcel.id)}
-                  className="flex items-center justify-center h-6 p-2 font-medium text-[#002761] border border-[#002761] hover:bg-[#002761] hover:text-white text-xs rounded cursor-pointer"
-                >
-                  Assign
-                </button>
+        {loading ? (
+          <TableBodySkeleton />
+        ) : unassignedParcels.length < 1 ? (
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell colSpan={5}>
+                <div className="h-[30vh] flex items-center justify-center text-sm font-medium">
+                  No unassigned parcel
+                </div>
               </Table.Cell>
             </Table.Row>
-          ))}
+          </Table.Body>
+        ) : (
+          <Table.Body className="text-xs">
+            {unassignedParcels.map((unassignedParcel) => (
+              <Table.Row key={unassignedParcel?.id}>
+                <Table.RowHeaderCell className="font-medium!">
+                  {unassignedParcel?.id}
+                </Table.RowHeaderCell>
+                <Table.Cell>{unassignedParcel?.trackingNumber}</Table.Cell>
+                <Table.Cell>
+                  {new Date(unassignedParcel.createdAt).toLocaleDateString()}
+                </Table.Cell>
+                <Table.Cell>
+                  {unassignedParcel.updatedAt
+                    ? new Date(unassignedParcel.updatedAt).toLocaleDateString()
+                    : "-"}
+                </Table.Cell>
+                <Table.Cell className="flex gap-4 items-center overflow-visible">
+                  <Dropdown
+                    users={users}
+                    value={selectedUsers[unassignedParcel.id]}
+                    onChange={(userId) =>
+                      setSelectedUsers((prev) => ({
+                        ...prev,
+                        [unassignedParcel.id]: userId,
+                      }))
+                    }
+                  />
 
-        </Table.Body>
-      )}
-    </Table.Root>
-     </div>
+                  <button
+                    onClick={() => handleAssign(unassignedParcel.id)}
+                    className="flex items-center justify-center h-6 p-2 font-medium text-[#002761] border border-[#002761] hover:bg-[#002761] hover:text-white text-xs rounded cursor-pointer"
+                  >
+                    Assign
+                  </button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        )}
+      </Table.Root>
+    </div>
   );
 }

@@ -50,7 +50,7 @@ export default function UnassignedListTable() {
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <Table.Root className="border border-gray-300 rounded-xl w-200">
+      <Table.Root className="border border-gray-300 rounded-xl w-200 py-2">
         <Table.Header>
           <Table.Row className="text-xs">
             <Table.ColumnHeaderCell>Parcel Id</Table.ColumnHeaderCell>
